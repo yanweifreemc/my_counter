@@ -1,7 +1,8 @@
-import Net8 "mo:base/Nat8";
+import Nat "mo:base/Nat";
+import Text "mo:base/Text";
 
 actor Counter{
-  stable var currentValue = 0;
+  stable var currentValue : Nat = 0;
 
   public func increment() : async() {
     currentValue += 1;
@@ -20,18 +21,18 @@ actor Counter{
   type HttpRequest = {
     url : Text;
     method : Text;
-    body : [Nat8];
+    body : Blob;
     headers : [HeaderField];
   };
   type HttpResponse = {
-    body : [Nat8];
+    body : Blob;
     headers : [HeaderField];
     status_code : Nat16;
   };
 
   public query func http_request(arg : HttpRequest) : async HttpResponse{
     {
-      body = [Net8.fromNat(currentValue)];
+      body = Text.encodeUtf8(Nat.toText(currentValue));
       headers = [];
       status_code = 200;
     }
